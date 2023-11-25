@@ -1,27 +1,27 @@
 //import React from 'react'
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { UserContext } from "../../Components/UserContext";
-import { useContext } from "react";
-import { Card, CardContent } from "@mui/material";
+import axios from 'axios'
+import { useState, useEffect } from 'react'
+import { UserContext } from '../../Components/UserContext'
+import { useContext } from 'react'
+import { Card, CardContent } from '@mui/material'
 
 export default function FacultyView() {
-  const [facultyReport, setFacultyReport] = useState(null);
-  const { user } = useContext(UserContext);
+  const [facultyReport, setFacultyReport] = useState(null)
+  const { user } = useContext(UserContext)
 
-  const email = user.email;
-  console.log(email);
+  const email = user.email
+  console.log(email)
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
-        `http://localhost:3000/FacultyDetail/${email}`
-      );
+        `http://192.168.1.20:3000/api/reports/faculty-report/${user._id}`
+      )
 
-      setFacultyReport(response.data);
-    };
-    fetchData();
-  }, [email]);
+      setFacultyReport(response.data.reportData)
+    }
+    fetchData()
+  }, [email, user._id])
 
   return (
     <>
@@ -29,13 +29,13 @@ export default function FacultyView() {
         <Card
           style={{
             maxWidth: 900,
-            padding: "20px 5px",
-            margin: "0 auto",
-            border: "#2B65EC 2px",
-            borderColor: "primary.main",
+            padding: '20px 5px',
+            margin: '0 auto',
+            border: '#2B65EC 2px',
+            borderColor: 'primary.main',
             borderRadius: 3,
             boxShadow: 24,
-            backgroundColor: "#E6E6E6",
+            backgroundColor: '#E6E6E6',
           }}
         >
           <CardContent>
@@ -47,7 +47,7 @@ export default function FacultyView() {
             <br />
             <hr />
             <br />
-            <h4>1. Name of Faculty:{facultyReport && facultyReport.name}</h4>
+            <h4>1. Name of Faculty:{user.name}</h4>
             <br />
             <h4>
               2. Field of Specialization:
@@ -57,21 +57,28 @@ export default function FacultyView() {
             <h4> 3. Publications:</h4>
             <br />
             <h4>&emsp;(i) Research Papers:</h4>
-            <ol>
-              {facultyReport &&
-                facultyReport.publicationsugcCareJournals &&
-                facultyReport.publicationsugcCareJournals.map(
-                  (paper, index) => <li key={index}>{paper}</li>
-                )}
-            </ol>
+            {facultyReport && facultyReport.publicationsugcCareJournals && (
+              <ol>
+                {facultyReport.publicationsugcCareJournals &&
+                  facultyReport.publicationsugcCareJournals.map(
+                    (paper, index) => {
+                      if (paper) {
+                        return <li key={index}>{paper}</li>
+                      }
+                    }
+                  )}
+              </ol>
+            )}
             <br />
             <h4>&emsp;(ii) Books :</h4>
             <ol>
               {facultyReport &&
                 facultyReport.publicationsbookswithISBN &&
-                facultyReport.publicationsbookswithISBN.map((paper, index) => (
-                  <li key={index}>{paper}</li>
-                ))}
+                facultyReport.publicationsbookswithISBN.map((paper, index) => {
+                  if (paper) {
+                    return <li key={index}>{paper}</li>
+                  }
+                })}
             </ol>
             <br />
             <br />
@@ -80,7 +87,11 @@ export default function FacultyView() {
               {facultyReport &&
                 facultyReport.publicationseditedBooksVolumes &&
                 facultyReport.publicationseditedBooksVolumes.map(
-                  (paper, index) => <li key={index}>{paper}</li>
+                  (paper, index) => {
+                    if (paper) {
+                      return <li key={index}>{paper}</li>
+                    }
+                  }
                 )}
             </ol>
             <br />
@@ -89,9 +100,11 @@ export default function FacultyView() {
             <ol>
               {facultyReport &&
                 facultyReport.publicationsbooksChapters &&
-                facultyReport.publicationsbooksChapters.map((paper, index) => (
-                  <li key={index}>{paper}</li>
-                ))}
+                facultyReport.publicationsbooksChapters.map((paper, index) => {
+                  if (paper) {
+                    return <li key={index}>{paper}</li>
+                  }
+                })}
             </ol>
             <br />
             <br />
@@ -99,9 +112,11 @@ export default function FacultyView() {
             <ol>
               {facultyReport &&
                 facultyReport.seminarsConferences &&
-                facultyReport.seminarsConferences.map((paper, index) => (
-                  <li key={index}>{paper}</li>
-                ))}
+                facultyReport.seminarsConferences.map((paper, index) => {
+                  if (paper) {
+                    return <li key={index}>{paper}</li>
+                  }
+                })}
             </ol>
             <br />
             <br />
@@ -110,7 +125,11 @@ export default function FacultyView() {
               {facultyReport &&
                 facultyReport.publicationspopularArticles &&
                 facultyReport.publicationspopularArticles.map(
-                  (paper, index) => <li key={index}>{paper}</li>
+                  (paper, index) => {
+                    if (paper) {
+                      return <li key={index}>{paper}</li>
+                    }
+                  }
                 )}
             </ol>
             <br />
@@ -172,12 +191,12 @@ export default function FacultyView() {
                 facultyReport.eContentDeveloped.map((paper, index) => (
                   <li key={index}>{paper}</li>
                 ))}
-            </ol>{" "}
+            </ol>{' '}
             <br />
             <br />
             <h4>&emsp;(d) Consultancy:</h4>
             <br />
-            <table border="1" style={{ borderCollapse: "collapse" }}>
+            <table border='1' style={{ borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
                   <th>Title of Project (Total outlay in Lakhs)</th>
@@ -207,7 +226,7 @@ export default function FacultyView() {
             <br />
             <h4>5.Research Projects:</h4>
             <br />
-            <table border="1" style={{ borderCollapse: "collapse" }}>
+            <table border='1' style={{ borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
                   <th>Title of Project (Total outlay in Lakhs)</th>
@@ -325,11 +344,11 @@ export default function FacultyView() {
               <br />
               <br />
               <table
-                border="1"
-                style={{ borderCollapse: "collapse", padding: 10 }}
+                border='1'
+                style={{ borderCollapse: 'collapse', padding: 10 }}
               >
                 <tr>
-                  <td rowSpan="3">Details of Faculties</td>
+                  <td rowSpan='3'>Details of Faculties</td>
                   <td>1</td>
                   <td>Name</td>
                   <td></td>
@@ -350,7 +369,7 @@ export default function FacultyView() {
                   </td>
                 </tr>
                 <tr>
-                  <td rowSpan="2">(A)Teaching Experience (in Years)</td>
+                  <td rowSpan='2'>(A)Teaching Experience (in Years)</td>
                   <td>4</td>
                   <td>UG</td>
                   <td></td>
@@ -363,7 +382,7 @@ export default function FacultyView() {
                   <td>{facultyReport && facultyReport.teachingExperiencePG}</td>
                 </tr>
                 <tr>
-                  <td rowSpan="16">(B) Research activities</td>
+                  <td rowSpan='16'>(B) Research activities</td>
                   <td>6</td>
                   <td>Basic Research</td>
                   <td></td>
@@ -406,7 +425,7 @@ export default function FacultyView() {
                 </tr>
                 <tr>
                   <td>11</td>
-                  <td rowSpan="2">Research Paper in UGC care list journals </td>
+                  <td rowSpan='2'>Research Paper in UGC care list journals </td>
                   <td>Group I</td>
                   <td>{facultyReport && facultyReport.publicationsgroupI}</td>
                 </tr>
@@ -418,7 +437,7 @@ export default function FacultyView() {
                 </tr>
                 <tr>
                   <td>13</td>
-                  <td rowSpan="2">Books /Books chapters Published </td>
+                  <td rowSpan='2'>Books /Books chapters Published </td>
                   <td>Books</td>
                   <td>
                     {facultyReport &&
@@ -445,7 +464,7 @@ export default function FacultyView() {
                 </tr>
                 <tr>
                   <td>16</td>
-                  <td rowSpan="2">Seminar / Conference/ Symposia organized </td>
+                  <td rowSpan='2'>Seminar / Conference/ Symposia organized </td>
                   <td>National</td>
                   <td>
                     {facultyReport && facultyReport.organizednational.length}
@@ -462,7 +481,7 @@ export default function FacultyView() {
                 </tr>
                 <tr>
                   <td>18</td>
-                  <td rowSpan="2">Seminar / Conference/ Symposia attended</td>
+                  <td rowSpan='2'>Seminar / Conference/ Symposia attended</td>
                   <td>National</td>
                   <td>
                     {facultyReport && facultyReport.attendednational.length}
@@ -492,7 +511,7 @@ export default function FacultyView() {
                   <td>{facultyReport && facultyReport.consultancy.length}</td>
                 </tr>
                 <tr>
-                  <td rowSpan="3">(C) Patent</td>
+                  <td rowSpan='3'>(C) Patent</td>
                   <td>22</td>
                   <td>Applied</td>
                   <td></td>
@@ -526,7 +545,7 @@ export default function FacultyView() {
                   </td>
                 </tr>
                 <tr>
-                  <td rowSpan="5">(E) Any Other</td>
+                  <td rowSpan='5'>(E) Any Other</td>
                   <td>26</td>
                   <td>Teaching /Extension /outreach activities</td>
                   <td></td>
@@ -552,7 +571,7 @@ export default function FacultyView() {
                 </tr>
                 <tr>
                   <td>29</td>
-                  <td rowSpan="2">Collaborations</td>
+                  <td rowSpan='2'>Collaborations</td>
                   <td>National</td>
                   <td>
                     {facultyReport &&
@@ -586,5 +605,5 @@ export default function FacultyView() {
         </Card>
       </>
     </>
-  );
+  )
 }

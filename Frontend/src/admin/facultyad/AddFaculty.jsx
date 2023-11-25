@@ -1,109 +1,110 @@
-import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import CloseIcon from "@mui/icons-material/Close";
-import IconButton from "@mui/material/IconButton";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import toast from "react-hot-toast";
+import { useState } from 'react'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import CloseIcon from '@mui/icons-material/Close'
+import IconButton from '@mui/material/IconButton'
+import Grid from '@mui/material/Grid'
+import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
+import MenuItem from '@mui/material/MenuItem'
+import axios from 'axios'
+import toast from 'react-hot-toast'
 
 export default function AddFaculty({ close, closeEvent }) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [departmentName, setDepartmentName] = useState("");
-  const [dateJoining, setDateJoining] = useState("");
-  const [designation, setDesignation] = useState("");
+  const [name, setName] = useState('')
+  const [username, setUser] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [departmentName, setDepartmentName] = useState('')
+  const [dateJoining, setDateJoining] = useState('')
+  const [designation, setDesignation] = useState('')
 
   const dept = [
     {
-      value: "Information Technology",
-      label: "Information Technology",
+      value: 'Information Technology',
+      label: 'Information Technology',
     },
     {
-      value: "Electronics and Communication Engineering",
-      label: "Electronics and Communication Engineering",
+      value: 'Electronics and Communication Engineering',
+      label: 'Electronics and Communication Engineering',
     },
     {
-      value: "Energy Engineering",
-      label: "Energy Engineering",
+      value: 'Energy Engineering',
+      label: 'Energy Engineering',
     },
     {
-      value: "Biomedical Engineering",
-      label: "Biomedical Engineering",
+      value: 'Biomedical Engineering',
+      label: 'Biomedical Engineering',
     },
     {
-      value: "Architecture",
-      label: "Architecture",
+      value: 'Architecture',
+      label: 'Architecture',
     },
     {
-      value: "Basic Sciences and Social Sciences",
-      label: "Basic Sciences and Social Sciences",
+      value: 'Basic Sciences and Social Sciences',
+      label: 'Basic Sciences and Social Sciences',
     },
     {
-      value: "Nanotechnology",
-      label: "Nanotechnology",
+      value: 'Nanotechnology',
+      label: 'Nanotechnology',
     },
-  ];
+  ]
 
   const post = [
     {
-      value: "Professor",
-      label: "Professor",
+      value: 'Professor',
+      label: 'Professor',
     },
     {
-      value: "Associate Professor",
-      label: "Associate Professor",
+      value: 'Associate Professor',
+      label: 'Associate Professor',
     },
     {
-      value: "Assistant Professor",
-      label: "Assistant Professor",
+      value: 'Assistant Professor',
+      label: 'Assistant Professor',
     },
-  ];
+  ]
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
-      const response = await axios.post("http://localhost:3000/Userregister", {
+      const response = await axios.post('http://192.168.1.20:3000/api/users', {
+        username,
         name,
         email,
         password,
-        role: "Faculty",
+        role: 'Faculty',
         departmentName,
         dateJoining,
         designation,
-      });
+      })
 
       if (response.status === 201) {
         // Registration was successful
-        console.log("User registered successfully:", response.data.message);
-        toast.success("Faculty created Successfuly");
-        close();
+        console.log('User registered successfully:', response.data.message)
+        toast.success('Faculty created Successfuly')
+        close()
         //navigate("/facultyadmin");
         //this.handleCloseModal();
       } else {
         // Handle other responses or errors
-        console.error("Error registering user:", response.data.error);
-        toast.error(response.data.error);
+        console.error('Error registering user:', response.data.error)
+        toast.error(response.data.error)
       }
     } catch (error) {
       // Handle network errors
-      console.error("Network error:", error.message);
+      console.error('Network error:', error.message)
     }
-  };
+  }
 
   return (
     <>
       <Box sx={{ m: 2 }} />
-      <Typography variant="h5" align="center">
+      <Typography variant='h5' align='center'>
         Add FACULTY
       </Typography>
       <IconButton
-        style={{ position: "absolute", top: "0", right: "0" }}
+        style={{ position: 'absolute', top: '0', right: '0' }}
         onClick={closeEvent}
       >
         <CloseIcon />
@@ -115,8 +116,27 @@ export default function AddFaculty({ close, closeEvent }) {
             <Grid xs={6} item>
               <TextField
                 fullWidth
-                label="Name"
-                placeholder="Enter your name"
+                label='Username'
+                placeholder='Enter an username'
+                required
+                value={username}
+                onChange={(e) => setUser(e.target.value)}
+              />
+            </Grid>
+            <Grid xs={6} item>
+              <TextField
+                fullWidth
+                label='User Role'
+                required
+                value={'Faculty'}
+                disabled
+              />
+            </Grid>
+            <Grid xs={6} item>
+              <TextField
+                fullWidth
+                label='Name'
+                placeholder='Enter your name'
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -126,9 +146,9 @@ export default function AddFaculty({ close, closeEvent }) {
               <TextField
                 fullWidth
                 required
-                label="Email"
-                placeholder="Enter your email"
-                type="email"
+                label='Email'
+                placeholder='Enter your email'
+                type='email'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -137,9 +157,9 @@ export default function AddFaculty({ close, closeEvent }) {
               <TextField
                 fullWidth
                 required
-                label="Password"
-                placeholder="Enter your password"
-                type="password"
+                label='Password'
+                placeholder='Enter your password'
+                type='password'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               ></TextField>
@@ -150,7 +170,7 @@ export default function AddFaculty({ close, closeEvent }) {
                 fullWidth
                 required
                 select
-                label="Dept Name"
+                label='Dept Name'
                 value={departmentName}
                 onChange={(e) => setDepartmentName(e.target.value)}
               >
@@ -163,10 +183,10 @@ export default function AddFaculty({ close, closeEvent }) {
             </Grid>
             <Grid xs={6} item>
               <TextField
-                type="date"
+                type='date'
                 required
                 fullWidth
-                label="Date Of Joining"
+                label='Date Of Joining'
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -179,7 +199,7 @@ export default function AddFaculty({ close, closeEvent }) {
                 fullWidth
                 select
                 required
-                label="Designaton"
+                label='Designaton'
                 value={designation}
                 onChange={(e) => setDesignation(e.target.value)}
               >
@@ -190,8 +210,8 @@ export default function AddFaculty({ close, closeEvent }) {
                 ))}
               </TextField>
             </Grid>
-            <Grid xs={12} item align="center">
-              <Button type="submit" variant="contained" color="success">
+            <Grid xs={12} item align='center'>
+              <Button type='submit' variant='contained' color='success'>
                 ADD Faculty
               </Button>
             </Grid>
@@ -200,5 +220,5 @@ export default function AddFaculty({ close, closeEvent }) {
       </Grid>
       <Box sx={{ m: 4 }} />
     </>
-  );
+  )
 }

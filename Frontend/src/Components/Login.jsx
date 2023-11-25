@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import "./main.css";
-import toast from "react-hot-toast";
-import { UserContext } from "./UserContext";
+import { useState, useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import './main.css'
+import toast from 'react-hot-toast'
+import { UserContext } from './UserContext'
 
 function Login() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("Dean");
-  const { setUser } = useContext(UserContext);
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [role, setRole] = useState('Dean')
+  const { setUser } = useContext(UserContext)
 
   // useEffect(() => {
   //   fetchUsers();
@@ -22,79 +22,79 @@ function Login() {
   // };
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    if (email === "" || password === "") {
-      toast.error("All fields are required !");
-      return;
+    if (username === '' || password === '') {
+      toast.error('All fields are required !')
+      return
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/UserLogin", {
-        email: email,
+      const response = await axios.post('http://192.168.1.20:3000/api/login', {
+        username: username,
         password: password,
         role: role,
-      });
+      })
 
-      const { user, token } = response.data;
-      console.log(user);
+      const { user, token } = response.data
+      console.log(user)
 
       // Store token and role in local storage or context as needed
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem('token', token)
+      localStorage.setItem('user', JSON.stringify(user))
 
-      setUser(user);
+      setUser(user)
 
       // Redirect based on role
-      if (user.role === "Dean") {
-        navigate("/dashadmin");
-      } else if (user.role === "HOD") {
-        navigate("/dashhod");
-      } else if (user.role === "Faculty") {
-        navigate("/dashfaculty");
+      if (user.role === 'Dean') {
+        navigate('/dashadmin')
+      } else if (user.role === 'HOD') {
+        navigate('/dashhod')
+      } else if (user.role === 'Faculty') {
+        navigate('/dashfaculty')
       }
-      toast.success("Login Successful");
+      toast.success('Login Successful')
     } catch (error) {
-      console.log("Login Error", error.response.data.message);
-      toast.error("Invalid Credentials");
+      console.log('Login Error', error.response.data.message)
+      toast.error('Invalid Credentials')
     }
-  };
+  }
 
   return (
     <>
-      <div className="main">
-        <div className="navbar">
-          <div className="icon">
-            <img className="logo" src="NEHU_logo.png" alt="nehu logo" />
+      <div className='main'>
+        <div className='navbar'>
+          <div className='icon'>
+            <img className='logo' src='NEHU_logo.png' alt='nehu logo' />
           </div>
 
-          <div className="menu">
+          <div className='menu'>
             <ul>
               <li>
-                <Link to="/">HOME</Link>
+                <Link to='/'>HOME</Link>
               </li>
               <li>
-                <Link to="#">ABOUT</Link>
+                <Link to='#'>ABOUT</Link>
               </li>
               <li>
-                <Link to="#">NEWS</Link>
+                <Link to='#'>NEWS</Link>
               </li>
               <li>
-                <Link to="#">ACADEMICS</Link>
+                <Link to='#'>ACADEMICS</Link>
               </li>
               <li>
-                <Link to="#">CONTACT</Link>
+                <Link to='#'>CONTACT</Link>
               </li>
             </ul>
           </div>
         </div>
-        <div className="content">
+        <div className='content'>
           <h1>
             School of <br />
             Technology <br />
             <span>Annual Report</span>
           </h1>
-          <p className="par">
+          <p className='par'>
             The Department is currently offering B.Tech., M.Tech. and Ph.D.
             degree
             <br />
@@ -108,22 +108,22 @@ function Login() {
             <button className="btnn">Sign Up</button>
           </Link> */}
 
-          <div className="form">
+          <div className='form'>
             <h2>Login Here</h2>
             <input
-              type="email"
-              name="email"
-              placeholder="Enter Email Here"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type='username'
+              name='username'
+              placeholder='Enter username'
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <input
-              type="password"
-              name="pass"
-              placeholder="Enter Password Here"
+              type='password'
+              name='pass'
+              placeholder='Enter Password Here'
               value={password}
               onChange={(e) => {
-                setPassword(e.target.value);
+                setPassword(e.target.value)
               }}
             />
             <br />
@@ -131,15 +131,15 @@ function Login() {
             <label>Login As : </label>
 
             <select
-              name="role"
+              name='role'
               value={role}
               onChange={(e) => setRole(e.target.value)}
             >
-              <option value="admin">Dean</option>
-              <option value="HOD">HOD</option>
-              <option value="Faculty">Faculty</option>
+              <option value='admin'>Dean</option>
+              <option value='HOD'>HOD</option>
+              <option value='Faculty'>Faculty</option>
             </select>
-            <button className="btnn" onClick={handleLogin}>
+            <button className='btnn' onClick={handleLogin}>
               Login
             </button>
             <br />
@@ -147,6 +147,6 @@ function Login() {
         </div>
       </div>
     </>
-  );
+  )
 }
-export default Login;
+export default Login
