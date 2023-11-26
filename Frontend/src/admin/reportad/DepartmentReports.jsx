@@ -1,16 +1,10 @@
-//import React from 'react'
-import axios from 'axios'
-import { useState, useEffect } from 'react'
-import { UserContext } from '../../Components/UserContext'
-import { useContext } from 'react'
 import { Card, CardContent } from '@mui/material'
-import HodSummarayTable from './HodSummaryTable'
-import StudentTableView from '../StudentEnrolment/StudentTableView'
+import StudentTableView from '../../hod/StudentEnrolment/StudentTableView'
+import HodSummarayTable from '../../hod/reportfaculty/HodSummaryTable'
 
-export default function HodView() {
-  const [report, setReport] = useState(null)
-  const [facultyReport, setFacultyReport] = useState(null)
-  const { user } = useContext(UserContext)
+export default function DepartmentReports({report, facultyReport}) {
+
+    console.log('report',facultyReport)
 
   const pageSize = 3
 
@@ -23,34 +17,6 @@ export default function HodView() {
   }
 
   const reportSets = chunkArray(facultyReport ? facultyReport : [], pageSize)
-
-  useEffect(() => {
-    const config = {
-      params: {
-        departmentName: user.departmentName,
-      },
-    }
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/api/hod/department-report`,
-          config
-        )
-
-        const facultyResponse = await axios.get(
-          `http://localhost:3000/api/reports/faculty-report`,
-          config
-        )
-
-        setFacultyReport(facultyResponse.data)
-        setReport(response.data.reportData)
-        // console.log(response.data.reportData)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    fetchData()
-  }, [user._id, user.departmentName])
 
   return (
     <>
@@ -71,14 +37,13 @@ export default function HodView() {
             <>
               <center>
                 <h3>
-                  INFORMATION FORMAT OF DEPARTMENT/CENTRE <br />
-                  NEHU ANNUAL REPORT 2022-2023
+                DEPARTMENT OF {report.departmentName}
                 </h3>
               </center>
               <hr />
               <br />
               <br />
-              <h4>Name of Department:{user.departmentName}</h4>
+              <h4>Name of Department:{report.departmentName}</h4>
               <br />
               <h4>Head :{report.name}</h4>
               <br />

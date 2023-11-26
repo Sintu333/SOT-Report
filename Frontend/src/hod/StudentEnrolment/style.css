@@ -1,0 +1,10 @@
+.tableInput:focus {
+    outline: none;
+    border: none;
+}
+.tableInput {
+    border: none;
+    font-weight: bold;
+    
+    text-align: center;
+}

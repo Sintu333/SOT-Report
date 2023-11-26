@@ -53,7 +53,7 @@ export default function FacultyList() {
 
   const handleDeleteUser = ({ userId }) => {
     axios
-      .delete(`http://192.168.1.20:3000/api/users/${userId}`)
+      .delete(`http://localhost:3000/api/users/${userId}`)
       .then((response) => {
         console.log(response.data)
         fetchUser()
@@ -65,7 +65,7 @@ export default function FacultyList() {
 
   const fetchUser = () => {
     axios
-      .get('http://192.168.1.20:3000/api/users/faculty')
+      .get('http://localhost:3000/api/users/faculty')
       .then((response) => {
         setUsers(response.data.users)
       })

@@ -1,40 +1,45 @@
 //import React from "react";
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { UserContext } from "../../Components/UserContext";
-import { useContext } from "react";
-import { Card, CardContent } from "@mui/material";
+import axios from 'axios'
+import { useState, useEffect } from 'react'
+import { UserContext } from '../../Components/UserContext'
+import { useContext } from 'react'
+import { Card, CardContent } from '@mui/material'
+import DepartmentReports from './DepartmentReports'
 
 export default function ViewDean() {
-  const [deanReport, setDeanReport] = useState(null);
-  const { user } = useContext(UserContext);
-
-  const email = user.email;
-  console.log(email);
+  const [deanReport, setDeanReport] = useState(null)
+  const [departmentReports, setDepartmentReports] = useState(null)
+  const { user } = useContext(UserContext)
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
-        `http://localhost:3000/DeanDetail/${email}`
-      );
+        `http://localhost:3000/api/dean/dean-report/${user._id}`
+      )
 
-      setDeanReport(response.data);
-    };
-    fetchData();
-  }, [email]);
+      const response2 = await axios.get(
+        'http://localhost:3000/api/dean/department-reports'
+      )
+
+      setDepartmentReports(response2.data)
+      console.log(response2.data)
+      setDeanReport(response.data.reportData)
+    }
+    fetchData()
+  }, [user._id])
 
   return (
     <>
       <Card
         style={{
           maxWidth: 900,
-          padding: "20px 5px",
-          margin: "0 auto",
-          border: "#2B65EC 2px",
-          borderColor: "primary.main",
+          padding: '20px 5px',
+          margin: '0 auto',
+          border: '#2B65EC 2px',
+          borderColor: 'primary.main',
           borderRadius: 3,
           boxShadow: 24,
-          backgroundColor: "#E6E6E6",
+          backgroundColor: '#E6E6E6',
         }}
       >
         <CardContent>
@@ -64,7 +69,7 @@ export default function ViewDean() {
             <h4>&emsp;2.Name of the Departments/Centres under the School:</h4>
             <br />
             <center>
-              <table border="1" style={{ borderCollapse: "collapse" }}>
+              <table border="1" style={{ borderCollapse: 'collapse' }}>
                 <tr>
                   <th>Sl. No.</th>
                   <th>Name of the Department/ Center</th>
@@ -103,7 +108,7 @@ export default function ViewDean() {
             <h4>&emsp;3.Salient Data of the School:</h4>
             <br />
             <center>
-              <table border="1" style={{ borderCollapse: "collapse" }}>
+              <table border="1" style={{ borderCollapse: 'collapse' }}>
                 <tr>
                   <td>Total No. of Students awarded Ph.D. Degree</td>
                   <td>{deanReport && deanReport.totalStudentsPhd}</td>
@@ -172,7 +177,7 @@ export default function ViewDean() {
 
             <br />
             <center>
-              <table border="1" style={{ borderCollapse: "collapse" }}>
+              <table border="1" style={{ borderCollapse: 'collapse' }}>
                 <tr>
                   <th colSpan="2">Patent(s) Filed</th>
                   <th colSpan="2">Patent(s) Published</th>
@@ -207,7 +212,7 @@ export default function ViewDean() {
             </h4>
             <br />
             <center>
-              <table border="1" style={{ borderCollapse: "collapse" }}>
+              <table border="1" style={{ borderCollapse: 'collapse' }}>
                 <tr>
                   <th>
                     Policy Documents Applied (Name of the Agency/Government)
@@ -251,6 +256,39 @@ export default function ViewDean() {
           </>
         </CardContent>
       </Card>
+      <br />
+      <br />
+      <br />
+      <div>
+        <center>
+          <h3>DEPARTMENT REPORTS</h3>
+        </center>
+        <br />
+        <br />
+        {departmentReports &&
+          departmentReports.map((departmentReport, index) => (
+            <Card
+              style={{
+                maxWidth: 900,
+                padding: '20px 5px',
+                margin: '30px auto',
+                border: '#2B65EC 2px',
+                borderColor: 'primary.main',
+                borderRadius: 3,
+                boxShadow: 24,
+                backgroundColor: '#E6E6E6',
+              }}
+              key={index}
+            >
+              <CardContent>
+                <DepartmentReports
+                  report={departmentReport.hodReportData}
+                  facultyReport={departmentReport.facultyReports}
+                />
+              </CardContent>
+            </Card>
+          ))}
+      </div>
     </>
-  );
+  )
 }

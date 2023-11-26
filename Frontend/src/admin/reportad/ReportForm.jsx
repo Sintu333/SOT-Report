@@ -68,17 +68,16 @@ export default function ReportForm() {
     //console.log(formData);
   };
 
-  const handleFormSubmit = async (event) => {
+  const handleSave = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3000/DeanReport", {
-        ...formData,
-        email: user.email,
-        user: user._id,
+      const response = await axios.post("http://localhost:3000/api/dean/dean-report", {
+        reportData: formData,
+        user
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         // Handle successful submission (e.g., show a success message)
         console.log("Report submitted successfully.");
         toast.success("Report submitted successfully");
@@ -93,46 +92,22 @@ export default function ReportForm() {
     }
   };
 
+  useEffect(() => {
   const fetchData = () => {
     axios
-      .get(`http://localhost:3000/getDeanReport/${user._id}`)
+      .get(`http://localhost:3000/api/dean/dean-report/${user._id}`)
       .then((response) => {
         console.log(response.data);
-        setFormData(response.data);
+        setFormData(response.data.reportData );
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  useEffect(() => {
     fetchData();
-  }, []);
+  }, [user._id]);
 
-  const handleSave = async () => {
-    try {
-      const response = await axios.post(
-        `http://localhost:3000/SaveDeanReport/${user._id}`,
-        {
-          ...formData,
-          email: user.email,
-        }
-      );
-
-      if (response.status === 200) {
-        // Handle successful save (e.g., show a success message)
-        console.log("Data saved successfully.");
-        toast.success("Data saved successfully");
-      } else if (response.status === 400) {
-        console.log("Error saving data.");
-        toast.error("Error saving data.");
-      }
-    } catch (error) {
-      // Handle errors (e.g., display an error message)
-      console.error("Error saving data:", error);
-      toast.error("Error saving data");
-    }
-  };
 
   return (
     <>
@@ -151,7 +126,7 @@ export default function ReportForm() {
             >
               Please fill up the form to submit your annual report.
             </Typography>
-            <form onSubmit={handleFormSubmit}>
+            <form >
               <Grid container spacing={2}>
                 <Grid xs={12} item>
                   <h4>Name of School</h4>

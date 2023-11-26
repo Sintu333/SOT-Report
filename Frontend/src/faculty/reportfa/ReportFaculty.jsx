@@ -122,7 +122,7 @@ export default function ReportFaculty() {
 
   const fetchData = () => {
     axios
-      .get(`http://192.168.1.20:3000/api/reports/faculty-report/${user._id}`)
+      .get(`http://localhost:3000/api/reports/faculty-report/${user._id}`)
       .then((response) => {
         console.log(response.data)
         setFormData(
@@ -143,7 +143,7 @@ export default function ReportFaculty() {
     console.log(formData)
     try {
       const response = await axios.post(
-        `http://192.168.1.20:3000/api/reports/faculty-report`,
+        `http://localhost:3000/api/reports/faculty-report`,
         {
           reportData: formData,
           user,

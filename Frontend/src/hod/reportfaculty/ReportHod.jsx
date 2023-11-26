@@ -7,314 +7,175 @@ import {
   Card,
   CardContent,
   Typography,
-  Input,
-} from "@mui/material";
-import { UserContext } from "../../Components/UserContext";
-import { useContext, useEffect, useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import * as XLSX from "xlsx";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import { Stack } from "@mui/material";
-import toast from "react-hot-toast";
-import UgSemester from "./HodTextAdd/UgSemester";
-import PgSemester from "./HodTextAdd/PgSemester";
-import OrganizedNational from "./HodTextAdd/OrganizedNational";
-import ConferencesOrganized from "./HodTextAdd/ConferencesOrganized";
-import AttendedNational from "./HodTextAdd/AttendedNational";
-import ConferencesAttended from "./HodTextAdd/ConferencesAttended";
-import UgcCareJournals from "./HodTextAdd/UgcCareJournals";
-import BooksISBN from "./HodTextAdd/BooksISBN";
-import EditedBooks from "./HodTextAdd/EditedBooks";
-import BooksChapters from "./HodTextAdd/BooksChapters";
-import Seminar from "./HodTextAdd/Seminar";
-import PopularArticles from "./HodTextAdd/PopularArticles";
-import ReportsNational from "./HodTextAdd/ReportsNational";
-import ReportsInternational from "./HodTextAdd/ReportsInternational";
-import EContent from "./HodTextAdd/EContent";
-import Consultancy from "./HodRowAdd/Consultancy";
-import ResearchProjects from "./HodRowAdd/ResearchProjects";
-import AcademicNational from "./HodTextAdd/AcademicNational";
-import AcademicInternational from "./HodTextAdd/AcademicInternational";
-import HonoursAwards from "./HodTextAdd/HonoursAwards";
-import OtherActivities from "./HodTextAdd/OtherActivities";
-import PhdDegree from "./HodRowAdd/PhdDegree";
-import Placement from "./HodRowAdd/PlacementStudents";
-import HigherStudies from "./HodRowAdd/HigherStudies";
-import ResearchFellowship from "./HodRowAdd/ResearchFellowship";
-import FundsReceived from "./HodRowAdd/FundsReceved";
-import Designation from "./HodRowAdd/Designation";
-import SendIcon from "@mui/icons-material/Send";
-import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
+} from '@mui/material'
+import { UserContext } from '../../Components/UserContext'
+import { useContext, useEffect, useState } from 'react'
+import axios from 'axios'
+import { Link } from 'react-router-dom'
+import toast from 'react-hot-toast'
+import UgSemester from './HodTextAdd/UgSemester'
+import PgSemester from './HodTextAdd/PgSemester'
+import OtherActivities from './HodTextAdd/OtherActivities'
+import PhdDegree from './HodRowAdd/PhdDegree'
+import Placement from './HodRowAdd/PlacementStudents'
+import HigherStudies from './HodRowAdd/HigherStudies'
+import ResearchFellowship from './HodRowAdd/ResearchFellowship'
+import FundsReceived from './HodRowAdd/FundsReceved'
+import Designation from './HodRowAdd/Designation'
+import SendIcon from '@mui/icons-material/Send'
+import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded'
+import StudentEnrolmentTable from '../StudentEnrolment/StudentEnrolmentTable'
+import DegreeAwardedTable from '../StudentEnrolment/DegreeAwardedTable'
 
 export default function ReportHod() {
-  const { user } = useContext(UserContext);
-
-  const [excelFile, setExcelFile] = useState(null);
-  const [typeError, setTypeError] = useState(null);
-  const [excelData, setExcelData] = useState(null);
-
-  const downloadExcelFile = async () => {
-    const fileUrl = "http://localhost:5173/Enrollment.xlsx";
-
-    // Fetch the Excel file as a blob
-    const response = await fetch(fileUrl);
-    const blob = await response.blob();
-
-    // Create a download link and trigger a click event to download the file
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "Enrollment_file.xlsx";
-    link.click();
-  };
-
-  //Uploading Excel File
-  // onchange event
-  const handleFile = (e) => {
-    let fileTypes = [
-      "application/vnd.ms-excel",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      "text/csv",
-    ];
-    let selectedFile = e.target.files[0];
-    if (selectedFile) {
-      if (selectedFile && fileTypes.includes(selectedFile.type)) {
-        setTypeError(null);
-        let reader = new FileReader();
-        reader.readAsArrayBuffer(selectedFile);
-        reader.onload = (e) => {
-          setExcelFile(e.target.result);
-        };
-      } else {
-        setTypeError("Please select only excel file types");
-        setExcelFile(null);
-      }
-    } else {
-      console.log("Please select your file");
-    }
-  };
-
-  // submit event
-  const handleFileSubmit = (e) => {
-    e.preventDefault();
-    if (excelFile !== null) {
-      const workbook = XLSX.read(excelFile, { type: "buffer" });
-      const worksheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[worksheetName];
-      const data = XLSX.utils.sheet_to_json(worksheet);
-      setExcelData(data.slice(0, 10));
-    }
-  };
+  const { user } = useContext(UserContext)
 
   const [formData, setFormData] = useState({
-    departmentName: user.departmentName || "",
-    name: user.name || "",
-    telephone: "",
-    email: user.email || "",
-
-    //facultydesignation: "",
+    departmentName: user.departmentName || '',
+    name: user.name || '',
+    telephone: '',
+    email: user.email || '',
     designation: [
       {
-        post: "",
-        name: "",
-        specialization: "",
+        post: '',
+        name: '',
+        specialization: '',
       },
     ],
 
-    thrustAreasOfResearch: [""],
-    academicActivitiesAchievements: [""],
+    thrustAreasOfResearch: [''],
+    academicActivitiesAchievements: [''],
 
-    studentsProfilebTech: "",
-    studentsProfilemTech: "",
-    studentsProfilephd: "",
-    //enrollmentDegrees: "",
+    studentsProfilebTech: '',
+    studentsProfilemTech: '',
+    studentsProfilephd: '',
+    studentEnrolment: [],
+    degreeAwarded: [],
 
     phdDegree: [
       {
-        name: "",
-        title: "",
-        nameOfSupervisor: "",
+        name: '',
+        title: '',
+        nameOfSupervisor: '',
       },
     ],
 
     placement: [
       {
-        name: "",
-        programme: "",
-        post: "",
-        place: "",
+        name: '',
+        programme: '',
+        post: '',
+        place: '',
       },
     ],
 
     higherStudies: [
       {
-        name: "",
-        programme: "",
-        institution: "",
-        country: "",
+        name: '',
+        programme: '',
+        institution: '',
+        country: '',
       },
     ],
 
     fellowship: [
       {
-        csir: "",
-        ugc: "",
-        rajivGandhi: "",
-        meritorious: "",
-        azad: "",
-        others: "",
+        csir: '',
+        ugc: '',
+        rajivGandhi: '',
+        meritorious: '',
+        azad: '',
+        others: '',
       },
     ],
 
-    teacherInCharge: [""],
-    placesVisited: [""],
-    duration: [""],
-    purpose: [""],
+    teacherInCharge: [''],
+    placesVisited: [''],
+    duration: [''],
+    purpose: [''],
 
-    undergraduate: [""],
-    ugsemesters: [""],
-    postgraduate: [""],
-    pgsemesters: [""],
-    phdCourses: [""],
+    undergraduate: [''],
+    ugsemesters: [''],
+    postgraduate: [''],
+    pgsemesters: [''],
+    phdCourses: [''],
 
-    organizednational: [""],
-    organizedinternational: [""], //Delete
+    patentsnationalpublished: '',
+    patentsnationalgranted: '',
 
-    attendednational: [""],
-    attendedinternational: [""], //Delete
-
-    publicationsugcCareJournals: [""],
-
-    publicationsbookswithISBN: [""],
-    publicationseditedBooksVolumes: [""],
-    publicationsbooksChapters: [""],
-    seminarsConferences: [""],
-
-    publicationspopularArticles: [""],
-    patentsnationalpublished: "",
-    patentsnationalgranted: "",
-
-    patentsinternationalpublished: "",
-    patentsinternationalgranted: "",
-
-    policyReportnational: [""],
-    policyReportinternational: [""],
-
-    eContentDeveloped: [""],
-
-    consultancy: [
-      {
-        title: "",
-        currentStatus: "",
-        nameOfConsultant: "",
-        multiTenure: "",
-        fundingAgency: "",
-        fund: "",
-      },
-    ],
-
+    patentsinternationalpublished: '',
+    patentsinternationalgranted: '',
     fundReceived: [
       {
-        srNo: "",
-        agency: "",
-        amount: "",
+        srNo: '',
+        agency: '',
+        amount: '',
       },
     ],
 
     researchProjects: [
       {
-        title: "",
-        currentStatus: "",
-        nameOfPlCopl: "",
-        multiTenure: "",
-        fundingAgency: "",
-        fund: "",
+        title: '',
+        currentStatus: '',
+        nameOfPlCopl: '',
+        multiTenure: '',
+        fundingAgency: '',
+        fund: '',
       },
     ],
 
-    academicCollaborationsnational: [""],
-    academicCollaborationsinternational: [""],
-    conferencesOrganized: [""],
-    conferencesAttended: [""],
-
-    honoursAwardsMemberships: [""],
-    otherActivities: [""],
-  });
-
-  const fetchData = () => {
-    axios
-      .get(`http://localhost:3000/getHodReport/${user._id}`)
-      .then((response) => {
-        console.log(response.data);
-        setFormData(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+    honoursAwardsMemberships: [''],
+    otherActivities: [''],
+  })
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    const fetchData = () => {
+      axios
+        .get(`http://localhost:3000/api/hod/hod-report/${user._id}`)
+        .then((response) => {
+          console.log(response.data)
+          setFormData(response.data.reportData)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+
+    fetchData()
+  }, [user._id])
 
   const handleFieldChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFormData({
       ...formData,
       [name]: value,
-    });
-  };
-
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-
-    try {
-      const response = await axios.post("http://localhost:3000/HodReport", {
-        ...formData,
-        email: user.email,
-        user: user._id,
-      });
-
-      if (response.status === 200) {
-        // Handle successful submission (e.g., show a success message)
-        console.log("Report submitted successfully.");
-        toast.success("Report submitted successfully");
-      } else if (response.status === 400) {
-        console.log(" Email already sent a report.");
-        toast.error("User has already sent a report.");
-      }
-    } catch (error) {
-      // Handle errors (e.g., display an error message)
-      console.error("Error submitting the report:", error);
-      toast.error("Error submitting the report");
-    }
-  };
+    })
+  }
 
   const handleSave = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/SaveHodReport/${user._id}`,
+        `http://localhost:3000/api/hod/hod-report`,
         {
-          ...formData,
-          email: user.email,
+          reportData: formData,
+          user,
         }
-      );
+      )
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         // Handle successful save (e.g., show a success message)
-        console.log("Data saved successfully.");
-        toast.success("Data saved successfully");
+        console.log('Data saved successfully.')
+        toast.success('Data saved successfully')
       } else if (response.status === 400) {
-        console.log("Error saving data.");
-        toast.error("Data not saved.");
+        console.log('Error saving data.')
+        toast.error('Data not saved.')
       }
     } catch (error) {
       // Handle errors (e.g., display an error message)
-      console.error("Error saving data:", error);
-      toast.error("Error saving data");
+      console.error('Error saving data:', error)
+      toast.error('Error saving data')
     }
-  };
+  }
 
   return (
     <>
@@ -323,7 +184,7 @@ export default function ReportHod() {
         Annual Report
       </Typography>
       <Grid>
-        <Card style={{ maxWidth: 1200, padding: "20px 5px", margin: "0 auto" }}>
+        <Card style={{ maxWidth: 1200, padding: '20px 5px', margin: '0 auto' }}>
           <CardContent>
             <Typography
               variant="body2"
@@ -335,7 +196,7 @@ export default function ReportHod() {
               <br />
               <br />
             </Typography>
-            <form onSubmit={handleFormSubmit}>
+            <form>
               <Grid container spacing={2}>
                 <Grid xs={12} item>
                   <h4>Name of Department:</h4>
@@ -464,90 +325,14 @@ export default function ReportHod() {
                     id="studentsProfilephd"
                   />
                 </Grid>
-                <Grid xs={12} item>
-                  <h4>
-                    Enrolment of students and Degrees Awarded from different
-                    States of India and Abroad
-                  </h4>
-                  <br />
-                  Upload the file in the specified format provided in the
-                  "DOWNLOAD FILE" button.
-                </Grid>
-                <Grid item xs={4} align="left">
-                  <Button
-                    variant="contained"
-                    color="success"
-                    onClick={downloadExcelFile}
-                    startIcon={<FileDownloadIcon />}
-                  >
-                    Download File
-                  </Button>
-                </Grid>
-                <Grid item xs={8} align="center">
-                  {/* <form
-                    className="form-group custom-form"
-                    onSubmit={handleFileSubmit}
-                  >
-                    {typeError && (
-                      <div className="alert alert-danger" role="alert">
-                        {typeError}
-                      </div>
-                    )}
-                  </form> */}
-                  <Stack direction="row" spacing={2}>
-                    {typeError && (
-                      <div className="alert alert-danger" role="alert">
-                        {typeError}
-                      </div>
-                    )}
-                    <Input
-                      input
-                      type="file"
-                      onChange={handleFile}
-                      variant="contained"
-                    ></Input>
-                    <Button
-                      variant="contained"
-                      color="warning"
-                      startIcon={<CloudUploadIcon />}
-                      onClick={handleFileSubmit}
-                    >
-                      Upload File
-                    </Button>
-                  </Stack>
-                  <br />
-                </Grid>
-
-                <Grid xs={12} item bgcolor="lightgray">
-                  <div className="viewer">
-                    {excelData ? (
-                      <div className="table-responsive">
-                        <table className="table">
-                          <thead>
-                            <tr>
-                              {Object.keys(excelData[0]).map((key) => (
-                                <th key={key}>{key}</th>
-                              ))}
-                            </tr>
-                          </thead>
-
-                          <tbody>
-                            {excelData.map((individualExcelData, index) => (
-                              <tr key={index}>
-                                {Object.keys(individualExcelData).map((key) => (
-                                  <td key={key}>{individualExcelData[key]}</td>
-                                ))}
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    ) : (
-                      <div>No File is uploaded yet!</div>
-                    )}
-                  </div>
-                </Grid>
-
+                <StudentEnrolmentTable
+                  formData={formData}
+                  setFormData={setFormData}
+                />
+                <DegreeAwardedTable
+                  formData={formData}
+                  setFormData={setFormData}
+                />
                 <Grid xs={12} item>
                   <h4>Students Awarded Ph.D. Degree</h4>
                 </Grid>
@@ -671,72 +456,7 @@ export default function ReportHod() {
                     id="phdCourses"
                   />
                 </Grid>
-                <Grid xs={12} item>
-                  <br />
-                  <h4>
-                    Seminars/Conferences/Workshops/Symposia/Extension Programmes
-                    (National/International) :
-                  </h4>
-                </Grid>
-                <Grid xs={12} item>
-                  <h4>(i) Organized</h4>
-                </Grid>
 
-                <Grid xs={12} item>
-                  <ConferencesOrganized
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-                </Grid>
-
-                <Grid xs={12} item>
-                  <h4>(ii) Attended</h4>
-                </Grid>
-
-                <Grid xs={12} item>
-                  <ConferencesAttended
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-                </Grid>
-
-                <Grid xs={12} item>
-                  <h4> Publications:</h4>
-                </Grid>
-                <Grid xs={12} item>
-                  <br />
-                  <h4> (i)Research Papers(only UGC CARE Journals)</h4>
-                  <UgcCareJournals
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-                </Grid>
-                <Grid xs={12} item>
-                  <h4>(ii)Books(only with ISBN)</h4>
-                  <BooksISBN formData={formData} setFormData={setFormData} />
-                </Grid>
-                <Grid xs={12} item>
-                  <h4>(iii)Edited Books/Volumes(only with ISBN)</h4>
-                  <EditedBooks formData={formData} setFormData={setFormData} />
-                </Grid>
-                <Grid xs={12} item>
-                  <h4>(iv)Books Chapters(only with ISBN)</h4>
-                  <BooksChapters
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-                </Grid>
-                <Grid xs={12} item>
-                  <h4>(v)Proceedings of Seminar/Conferences</h4>
-                  <Seminar formData={formData} setFormData={setFormData} />
-                </Grid>
-                <Grid xs={12} item>
-                  <h4>(vi)Popular Articles(News Paper and Magazines)</h4>
-                  <PopularArticles
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-                </Grid>
                 <Grid xs={12} item>
                   <h4> IPR Items</h4>
                 </Grid>
@@ -798,37 +518,7 @@ export default function ReportHod() {
                     id="patentsinternationalgranted"
                   />
                 </Grid>
-                <Grid xs={12} item>
-                  <h4>(b) Policy Reports:</h4>
-                </Grid>
-                <Grid xs={12} item>
-                  (i) National:
-                </Grid>
-                <Grid xs={12} item>
-                  <ReportsNational
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-                </Grid>
-                <Grid xs={12} item>
-                  (ii) International:
-                </Grid>
-                <Grid xs={12} item>
-                  <ReportsInternational
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-                </Grid>
-                <Grid xs={12} item>
-                  <h4>(c) E-Content developed (MOOCs/SWAYAM):</h4>
-                </Grid>
-                <Grid xs={12} item>
-                  <EContent formData={formData} setFormData={setFormData} />
-                </Grid>
-                <Grid xs={12} item>
-                  <h4>(d) Consultancy:</h4>
-                </Grid>
-                <Consultancy formData={formData} setFormData={setFormData} />
+
                 <Grid xs={12} item>
                   <h4>Funds Received during the current Year</h4>
                 </Grid>
@@ -843,74 +533,6 @@ export default function ReportHod() {
                   />
                 </Grid>
 
-                <Grid xs={12} item>
-                  <h4>
-                    (B) EMR Research Projects to individual faculty members:
-                  </h4>
-                </Grid>
-                <Grid xs={12} item>
-                  <ResearchProjects
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-                </Grid>
-                <Grid xs={12} item>
-                  <br />
-                  <h4>Seminar/Conference/Symposium/Extension Programme etc.</h4>
-                </Grid>
-                <Grid xs={12} item>
-                  <h4>(i) Organized</h4>
-                </Grid>
-
-                <Grid xs={12} item>
-                  <OrganizedNational
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-                </Grid>
-
-                <Grid xs={12} item></Grid>
-                <Grid xs={12} item>
-                  <h4>(ii) Attended</h4>
-                </Grid>
-
-                <Grid xs={12} item>
-                  <AttendedNational
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-                </Grid>
-                <Grid xs={12} item>
-                  <h4> Academic Collaborations</h4>
-                </Grid>
-                <Grid xs={12} item>
-                  (i) National
-                </Grid>
-                <Grid xs={12} item>
-                  <AcademicNational
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-                </Grid>
-                <Grid xs={12} item>
-                  (ii) International
-                </Grid>
-                <Grid xs={12} item>
-                  <AcademicInternational
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-                </Grid>
-                <Grid xs={12} item>
-                  <h4> Honours/Awards/Recognition/Membership/Fellowship</h4>
-                </Grid>
-
-                <Grid xs={12} item>
-                  <HonoursAwards
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-                </Grid>
                 <Grid xs={12} item>
                   <h4> Other Activities/ Achievements</h4>
                 </Grid>
@@ -956,5 +578,5 @@ export default function ReportHod() {
         </Card>
       </Grid>
     </>
-  );
+  )
 }

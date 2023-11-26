@@ -32,10 +32,19 @@ export default function Reportfaculty() {
 
   const userDepartment = user.departmentName;
 
+
+
   useEffect(() => {
     // Make the Axios GET request when the component mounts
+
+    const config = {
+      params: {
+        userDepartment: user.departmentName,
+      },
+    };
+
     axios
-      .get(`http://localhost:3000/HodFacultyList?department=${userDepartment}`)
+      .get(`http://localhost:3000/api/faculty/department`, config)
       .then((response) => {
         setUsers(response.data.users);
         //console.log(response.data.users);
@@ -43,7 +52,7 @@ export default function Reportfaculty() {
       .catch((error) => {
         console.error(error);
       });
-  }, [userDepartment]);
+  }, [user.departmentName, userDepartment]);
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>

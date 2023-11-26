@@ -1,29 +1,29 @@
 import { Box, Button, Paper, TextField, Typography } from '@mui/material'
 import './style.css'
 
-const StudentEnrolmentTable = ({ formData, setFormData }) => {
-  const { studentEnrolment } = formData
+const DegreeAwardedTable = ({ formData, setFormData }) => {
+  const { degreeAwarded } = formData
 
   const handleDegreeNameChange = (degreeIndex, value) => {
-    const updatedEnrolment = [...studentEnrolment]
+    const updatedEnrolment = [...degreeAwarded]
     updatedEnrolment[degreeIndex].degreeName = value
-    setFormData({ ...formData, studentEnrolment: updatedEnrolment })
+    setFormData({ ...formData, degreeAwarded: updatedEnrolment })
   }
 
   const handleInputChange = (degreeIndex, studentIndex, field, value) => {
-    const updatedEnrolment = [...studentEnrolment]
+    const updatedEnrolment = [...degreeAwarded]
     updatedEnrolment[degreeIndex].students[studentIndex][field] = value
-    setFormData({ ...formData, studentEnrolment: updatedEnrolment })
+    setFormData({ ...formData, degreeAwarded: updatedEnrolment })
   }
 
   const handleTotalsChange = (degreeIndex, field, value) => {
-    const updatedEnrolment = [...studentEnrolment]
+    const updatedEnrolment = [...degreeAwarded]
     updatedEnrolment[degreeIndex].totals[field] = value
-    setFormData({ ...formData, studentEnrolment: updatedEnrolment })
+    setFormData({ ...formData, degreeAwarded: updatedEnrolment })
   }
 
   const handleAddDegree = () => {
-    const updatedEnrolment = [...studentEnrolment]
+    const updatedEnrolment = [...degreeAwarded]
     updatedEnrolment.push({
       degreeName: '',
       students: [
@@ -55,7 +55,7 @@ const StudentEnrolmentTable = ({ formData, setFormData }) => {
         subTotal: '',
       },
     })
-    setFormData({ ...formData, studentEnrolment: updatedEnrolment })
+    setFormData({ ...formData, degreeAwarded: updatedEnrolment })
   }
 
   const tableStyle = {
@@ -86,7 +86,7 @@ const StudentEnrolmentTable = ({ formData, setFormData }) => {
   }
 
   const handleAddRow = (degreeIndex) => {
-    const updatedEnrolment = [...studentEnrolment]
+    const updatedEnrolment = [...degreeAwarded]
     updatedEnrolment[degreeIndex].students.push({
       state: '',
       genMale: '',
@@ -104,27 +104,27 @@ const StudentEnrolmentTable = ({ formData, setFormData }) => {
       totalMale: '',
       totalFemale: '',
     })
-    setFormData({ ...formData, studentEnrolment: updatedEnrolment })
+    setFormData({ ...formData, degreeAwarded: updatedEnrolment })
   }
 
   const handleDeleteLastRow = (degreeIndex) => {
-    const updatedEnrolment = [...studentEnrolment]
+    const updatedEnrolment = [...degreeAwarded]
     const lastRowIndex = updatedEnrolment[degreeIndex].students.length - 1
     if (lastRowIndex >= 0) {
       updatedEnrolment[degreeIndex].students.splice(lastRowIndex, 1)
-      setFormData({ ...formData, studentEnrolment: updatedEnrolment })
+      setFormData({ ...formData, degreeAwarded: updatedEnrolment })
     }
   }
 
   const handleDeleteDegree = (degreeIndex) => {
-    const updatedEnrolment = [...studentEnrolment]
+    const updatedEnrolment = [...degreeAwarded]
     updatedEnrolment.splice(degreeIndex, 1)
-    setFormData({ ...formData, studentEnrolment: updatedEnrolment })
+    setFormData({ ...formData, degreeAwarded: updatedEnrolment })
   }
 
   return (
     <>
-      <Box sx={{ display: 'flex', width: '100%' }}>
+      <Box sx={{ display: 'flex', width: '100%'  }}>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <Typography paragraph>
             <br />
@@ -138,7 +138,7 @@ const StudentEnrolmentTable = ({ formData, setFormData }) => {
           >
             <Typography variant="h5" fontWeight={'bold'} align="center">
               <br />
-              Enrolment of student from different state of India and Aborad
+              Degrees Awarded to students from different States of India and Abroad
               <br />
             </Typography>
             <Box
@@ -150,7 +150,7 @@ const StudentEnrolmentTable = ({ formData, setFormData }) => {
             ></Box>
             {
               <>
-                {studentEnrolment.map((degree, degreeIndex) => (
+                {degreeAwarded.map((degree, degreeIndex) => (
                   <Box key={degreeIndex}>
                     <div
                       style={{
@@ -653,4 +653,4 @@ const StudentEnrolmentTable = ({ formData, setFormData }) => {
   )
 }
 
-export default StudentEnrolmentTable
+export default DegreeAwardedTable

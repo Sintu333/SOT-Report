@@ -54,7 +54,7 @@ export default function HodList() {
   //console.log(users);
   const fetchUser = () => {
     axios
-      .get('http://192.168.1.20:3000/api/users/hod')
+      .get('http://localhost:3000/api/users/hod')
       .then((response) => {
         setUsers(response.data.users)
       })
@@ -71,7 +71,7 @@ export default function HodList() {
   const deleteUser = async ({ userId }) => {
     try {
       const response = await axios.delete(
-        `http://192.168.1.20:3000/api/users/${userId}`
+        `http://localhost:3000/api/users/${userId}`
       )
       console.log('User deleted:', response.data)
       fetchUser()

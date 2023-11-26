@@ -68,7 +68,7 @@ export default function AddHod({ close, closeEvent }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await axios.post('http://192.168.1.20:3000/api/users', {
+      const response = await axios.post('http://localhost:3000/api/users', {
         name,
         username,
         email,
