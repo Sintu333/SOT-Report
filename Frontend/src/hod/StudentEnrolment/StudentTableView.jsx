@@ -106,7 +106,7 @@ const StudentTableView = ({ studentEnrolment,label }) => {
                         <tbody>
                           {degree.students.map((row, index) => (
                             <tr key={index}>
-                              <td style={tdStyle}>{row.stateName}</td>
+                              <td style={tdStyle}>{row.state}</td>
                               <td style={tdStyle}>{row.genMale}</td>
                               <td style={tdStyle}>{row.genFemale}</td>
                               <td style={tdStyle}>{row.stMale}</td>
